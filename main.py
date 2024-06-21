@@ -90,7 +90,10 @@ async def check_users():
             user_id = getattr(user, 'id', None)
 
             if not await check_user_in_db(connection, username, user_id):
-                message = f"Пользователь @{username or user_id} не найден в базе данных."
+                if username:
+                    message = f"Пользователь @{username} не найден в базе данных."
+                else:
+                    message = f"Пользователь с id {user_id} не найден в базе данных."
                 for admin_id in admin_ids:
                     user = await client.get_entity(admin_id)
                     if not user.bot:
